@@ -1,0 +1,473 @@
+/* Seraph secure login — branded operator console */
+
+:root {
+  --seraph-brand: #00387a;
+  --seraph-brand-deep: #001a3d;
+  --seraph-brand-mid: #002c60;
+  --seraph-cta: #f26522;
+  --seraph-cta-deep: #d4551a;
+  --seraph-ink: #0b1220;
+  --seraph-muted: rgba(255, 255, 255, 0.68);
+  --seraph-line: rgba(255, 255, 255, 0.14);
+  --seraph-panel: rgba(255, 255, 255, 0.96);
+  --seraph-serif: "IBM Plex Serif", Georgia, serif;
+  --seraph-sans: "IBM Plex Sans", "Segoe UI", sans-serif;
+}
+
+html {
+  min-height: 100%;
+}
+
+body.login.seraph-secure-login {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--seraph-brand-deep) !important;
+  color: #fff;
+  font-family: var(--seraph-sans);
+  overflow-x: hidden;
+}
+
+body.login.seraph-secure-login #login {
+  width: min(100%, 400px);
+  padding: 0;
+  margin: 0;
+}
+
+/* Full-bleed shell */
+.seraph-login-shell {
+  position: relative;
+  min-height: 100vh;
+  display: grid;
+}
+
+.seraph-login-stage {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(1100px 700px at 12% 18%, rgba(0, 56, 122, 0.9), transparent 55%),
+    radial-gradient(900px 600px at 88% 82%, rgba(242, 101, 34, 0.22), transparent 50%),
+    linear-gradient(155deg, #001028 0%, #002c60 48%, #001a3d 100%);
+}
+
+.seraph-login-stage__glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40px);
+  opacity: 0.55;
+  animation: seraph-drift 14s ease-in-out infinite alternate;
+}
+
+.seraph-login-stage__glow--a {
+  width: 42vw;
+  height: 42vw;
+  left: -8%;
+  top: -12%;
+  background: rgba(0, 90, 180, 0.45);
+}
+
+.seraph-login-stage__glow--b {
+  width: 36vw;
+  height: 36vw;
+  right: -10%;
+  bottom: -14%;
+  background: rgba(242, 101, 34, 0.28);
+  animation-delay: -4s;
+}
+
+.seraph-login-stage__grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse at center, #000 25%, transparent 75%);
+  opacity: 0.55;
+}
+
+.seraph-login-stage__orbit {
+  position: absolute;
+  width: min(62vw, 720px);
+  height: min(62vw, 720px);
+  left: 50%;
+  top: 48%;
+  translate: -50% -50%;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
+  box-shadow:
+    inset 0 0 0 1px rgba(242, 101, 34, 0.08),
+    0 0 80px rgba(0, 56, 122, 0.25);
+  animation: seraph-spin 48s linear infinite;
+}
+
+.seraph-login-stage__orbit::before,
+.seraph-login-stage__orbit::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background: var(--seraph-cta);
+  box-shadow: 0 0 18px rgba(242, 101, 34, 0.65);
+}
+
+.seraph-login-stage__orbit::before {
+  width: 9px;
+  height: 9px;
+  top: 8%;
+  left: 50%;
+}
+
+.seraph-login-stage__orbit::after {
+  width: 6px;
+  height: 6px;
+  bottom: 18%;
+  right: 14%;
+  background: #7eb6ff;
+  box-shadow: 0 0 14px rgba(126, 182, 255, 0.7);
+}
+
+.seraph-login-stage__mark {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 45%, rgba(255, 255, 255, 0.06), transparent 28%);
+}
+
+.seraph-login-layout {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: clamp(1.5rem, 4vw, 4rem);
+  align-items: center;
+  min-height: 100vh;
+  width: min(1120px, calc(100% - 3rem));
+  margin: 0 auto;
+  padding: 2.5rem 0;
+}
+
+.seraph-login-brand {
+  color: #fff;
+  max-width: 34rem;
+  animation: seraph-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.seraph-login-brand__eyebrow {
+  margin: 0 0 0.85rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.seraph-login-brand__title {
+  margin: 0;
+  font-family: var(--seraph-serif);
+  font-size: clamp(2.4rem, 5vw, 3.75rem);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.seraph-login-brand__copy {
+  margin: 1.1rem 0 0;
+  font-size: 1.05rem;
+  line-height: 1.55;
+  color: var(--seraph-muted);
+  max-width: 32ch;
+}
+
+.seraph-login-brand__meta {
+  list-style: none;
+  margin: 1.75rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.seraph-login-brand__meta li {
+  position: relative;
+  padding-left: 1.15rem;
+  font-size: 0.92rem;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.seraph-login-brand__meta li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55rem;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--seraph-cta);
+  box-shadow: 0 0 0 3px rgba(242, 101, 34, 0.2);
+}
+
+.seraph-login-panel {
+  justify-self: end;
+  width: min(100%, 420px);
+  animation: seraph-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+}
+
+/* Relocate WP #login into visual hierarchy */
+body.login.seraph-secure-login #login {
+  position: relative;
+  width: 100%;
+  background: var(--seraph-panel);
+  color: var(--seraph-ink);
+  border-radius: 22px;
+  padding: 2rem 1.75rem 1.5rem;
+  box-shadow:
+    0 30px 80px rgba(0, 10, 30, 0.45),
+    0 0 0 1px rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(8px);
+}
+
+body.login.seraph-secure-login #login h1 {
+  margin: 0 0 0.35rem;
+}
+
+body.login.seraph-secure-login #login h1 a {
+  background-image: var(--seraph-login-logo) !important;
+  background-size: contain !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  background-color: var(--seraph-brand-mid) !important;
+  border-radius: 14px !important;
+  width: 100% !important;
+  height: 64px !important;
+  margin: 0 auto 0.35rem !important;
+  padding: 0.65rem 1rem !important;
+  box-sizing: border-box !important;
+  filter: none;
+}
+
+.seraph-login-welcome {
+  margin: 0.4rem 0 1.1rem !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  text-align: center;
+  font-family: var(--seraph-serif);
+  font-size: 1.35rem !important;
+  font-weight: 600;
+  color: var(--seraph-brand) !important;
+}
+
+body.login.seraph-secure-login #login form {
+  margin-top: 0.5rem;
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+  overflow: visible;
+}
+
+body.login.seraph-secure-login .login label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #4a5568;
+}
+
+body.login.seraph-secure-login input[type="text"],
+body.login.seraph-secure-login input[type="password"],
+body.login.seraph-secure-login input[type="email"] {
+  font-family: var(--seraph-sans);
+  font-size: 1rem !important;
+  border: 1px solid #d7deea !important;
+  border-radius: 12px !important;
+  background: #f7f9fc !important;
+  box-shadow: none !important;
+  padding: 0.7rem 0.85rem !important;
+  margin-top: 0.35rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+body.login.seraph-secure-login input[type="text"]:focus,
+body.login.seraph-secure-login input[type="password"]:focus,
+body.login.seraph-secure-login input[type="email"]:focus {
+  border-color: var(--seraph-brand) !important;
+  background: #fff !important;
+  box-shadow: 0 0 0 3px rgba(0, 56, 122, 0.15) !important;
+}
+
+body.login.seraph-secure-login .forgetmenot {
+  margin-top: 0.85rem;
+}
+
+body.login.seraph-secure-login .forgetmenot label {
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #334155;
+}
+
+body.login.seraph-secure-login .submit {
+  margin-top: 1.1rem;
+  display: block;
+}
+
+body.login.seraph-secure-login .button-primary,
+body.login.seraph-secure-login .wp-core-ui .button-primary {
+  float: none !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 48px;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: linear-gradient(135deg, var(--seraph-cta) 0%, var(--seraph-cta-deep) 100%) !important;
+  box-shadow: 0 12px 28px rgba(242, 101, 34, 0.35) !important;
+  text-shadow: none !important;
+  font-family: var(--seraph-sans) !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease !important;
+}
+
+body.login.seraph-secure-login .button-primary:hover,
+body.login.seraph-secure-login .wp-core-ui .button-primary:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+  box-shadow: 0 16px 34px rgba(242, 101, 34, 0.42) !important;
+}
+
+body.login.seraph-secure-login .button-primary:focus {
+  box-shadow: 0 0 0 3px rgba(242, 101, 34, 0.35), 0 12px 28px rgba(242, 101, 34, 0.35) !important;
+}
+
+body.login.seraph-secure-login #nav,
+body.login.seraph-secure-login #backtoblog {
+  margin: 0.85rem 0 0 !important;
+  padding: 0 !important;
+  text-align: center;
+}
+
+body.login.seraph-secure-login #nav a,
+body.login.seraph-secure-login #backtoblog a,
+body.login.seraph-secure-login .privacy-policy-page-link a {
+  color: #48607a !important;
+  font-size: 0.86rem;
+  text-decoration: none;
+}
+
+body.login.seraph-secure-login #nav a:hover,
+body.login.seraph-secure-login #backtoblog a:hover {
+  color: var(--seraph-brand) !important;
+}
+
+body.login.seraph-secure-login .privacy-policy-page-link {
+  text-align: center;
+  margin: 0.5rem 0 0;
+}
+
+body.login.seraph-secure-login #login_error,
+body.login.seraph-secure-login .message,
+body.login.seraph-secure-login .success {
+  border-radius: 12px !important;
+  border-left-width: 4px !important;
+  box-shadow: none !important;
+  margin-bottom: 1rem !important;
+}
+
+.seraph-login-foot {
+  margin: 1rem 0 0;
+  text-align: center;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.seraph-login-foot a {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* Language / language switcher if present */
+body.login.seraph-secure-login .language-switcher {
+  margin-top: 1rem;
+}
+
+/* Hide default WP language fluff spacing issues */
+body.login.seraph-secure-login #language-switcher {
+  clear: both;
+}
+
+@keyframes seraph-drift {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(3%, 4%, 0) scale(1.06); }
+}
+
+@keyframes seraph-spin {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes seraph-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 920px) {
+  .seraph-login-layout {
+    grid-template-columns: 1fr;
+    width: min(460px, calc(100% - 2rem));
+    padding: 1.5rem 0 2rem;
+  }
+
+  .seraph-login-brand {
+    text-align: center;
+    max-width: none;
+  }
+
+  .seraph-login-brand__copy {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .seraph-login-brand__meta {
+    justify-items: center;
+  }
+
+  .seraph-login-brand__meta li {
+    padding-left: 0;
+  }
+
+  .seraph-login-brand__meta li::before {
+    display: none;
+  }
+
+  .seraph-login-panel {
+    justify-self: stretch;
+    width: 100%;
+  }
+
+  .seraph-login-stage__orbit {
+    opacity: 0.35;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .seraph-login-stage__glow,
+  .seraph-login-stage__orbit,
+  .seraph-login-brand,
+  .seraph-login-panel {
+    animation: none !important;
+  }
+}
